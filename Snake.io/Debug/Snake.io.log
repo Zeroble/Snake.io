@@ -1,0 +1,4 @@
+﻿  Snake.io.cpp
+g:\민용파일\programming\c언어\c언어projects\snake.io\snake.io\snake.io.cpp(11): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+  Snake.io.vcxproj -> G:\민용파일\Programming\C언어\C언어Projects\Snake.io\Debug\Snake.io.exe
+  Snake.io.vcxproj -> G:\민용파일\Programming\C언어\C언어Projects\Snake.io\Debug\Snake.io.pdb (Partial PDB)
