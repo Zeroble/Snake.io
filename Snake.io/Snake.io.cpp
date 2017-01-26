@@ -141,6 +141,10 @@ int main()
 				gStatus = END;
 			break;
 		}
+		for (int i = 1; i < snakeLen; i++) {
+			if (x[0] == x[i] && y[0] == y[i])
+				gStatus = END;
+		}
 		if (x[0] == gItem.x && y[0] == gItem.y) {
 			snakeLen++;
 			gItemoo = OFF;
