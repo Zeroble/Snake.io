@@ -22,6 +22,16 @@ typedef enum g_gameDirection {
 }gameDirection;
 gameDirection gDirection = RIGHT;
 
+typedef enum g_itemOnOff {
+	ON,OFF
+}gameItemOnOff;
+gameItemOnOff gItemoo = OFF;
+
+typedef struct g_item {
+	int x, y;
+}gameItem;
+gameItem gItem;
+
 
 void startIntro() {
 	//                                                                 ..
@@ -33,7 +43,7 @@ void startIntro() {
 	printf("-----------------------------------------------------------------------------------------------------------------------\n");
 	printf("                                                                                                                       \n");
 	printf("                                                         상 : 8                                                        \n");
-	printf("                                                         하 : 2                                                        \n");
+	printf("                                                         하 : 5                                                        \n");
 	printf("                                                         좌 : 4                                                        \n");
 	printf("      ■■■■■     ⓤ                                  우 : 6                                                        \n");
 	printf("      ■                                                                                                               \n");
@@ -60,8 +70,9 @@ void startIntro() {
 int main()
 {
 	//120*100
-	int x[60];
-	int y[30];
+	int x[180];
+	int y[180];
+	int snakeLen = 1;
 
 	char nKey;
 
@@ -69,11 +80,8 @@ int main()
 	oldTime = clock();
 
 	startIntro();
+	_getch();
 	gStatus = RUNNING;
-	for (int i = 0; i < 60; i++)
-		x[i] = -10;
-	for (int i = 0; i < 30; i++)
-		y[i] = -10;
 
 	x[0] = 30;
 	y[0] = 15; //초기위치값
@@ -99,39 +107,58 @@ int main()
 				gDirection = RIGHT;
 				break;
 
-			case '2': //아래
+			case '5': //아래
 				gDirection = DOWN;
 				break;
 			}
+		}
+		for (int i = snakeLen - 1; i > 0; i--) {
+			x[i] = x[i - 1];
+			y[i] = y[i - 1];
 		}
 		switch (gDirection)
 		{
 		case UP :
 			y[0]--;
 			if (y[0] < 0)
-				y[0] = 29;
+				gStatus = END;
 			break;
 		case LEFT :
 			x[0]--;
 			x[0]--;
 			if (x[0] < 0)
-				x[0] = 118;
+				gStatus = END;
 			break;
 		case RIGHT :
 			x[0]++;
 			x[0]++;
 			if (x[0] > 118)
-				x[0] = 0;
+				gStatus = END;
 			break;
 		case DOWN :
 			y[0]++;
 			if (y[0] > 29)
-				y[0] = 0;
+				gStatus = END;
 			break;
 		}
+		if (x[0] == gItem.x && y[0] == gItem.y) {
+			snakeLen++;
+			gItemoo = OFF;
+		}
+		if (gItemoo == OFF) {
+			gItemoo = ON;
+			srand(time(NULL));
+			gItem.x = (rand() % 60)*2;
+			gItem.y = rand() % 30;
+		}
+
 		system("cls");
-		gotoxy(x[0], y[0]);
-		printf("■");
+		for (int i = 0; i < snakeLen; i++) {
+			gotoxy(x[i], y[i]);
+			printf("■");
+		}
+		gotoxy(gItem.x,gItem.y);
+		printf("ⓤ");
 		while (1)
 		{
 			curTime = clock();
