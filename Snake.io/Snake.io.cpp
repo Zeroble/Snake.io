@@ -65,13 +65,48 @@ void startIntro() {
 	printf("                                                                                                                       \n");
 	printf("                                                                                                                       \n");
 	printf("                                                                                                                       ");
+	_getch();
 }
-
+void end(int score) {
+	system("cls");
+	printf("                                                         E N D                                                         \n");
+	printf("                                                    S C O R E : %3d                                                    \n",score);
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       \n");
+	printf("                                                                                                                       ");
+	_getch();
+}
 int main()
 {
 	//120*100
 	int x[180];
 	int y[180];
+	int Ix, Iy;
 	int snakeLen = 1;
 
 	char nKey;
@@ -80,16 +115,16 @@ int main()
 	oldTime = clock();
 
 	startIntro();
-	_getch();
 	gStatus = RUNNING;
 
-	x[0] = 30;
+	x[0] = 60;
 	y[0] = 15; //초기위치값
-
+	
 	while (1)
 	{
 		if (gStatus == END)
 			break;
+
 		if (_kbhit())
 		{
 			nKey = _getch();
@@ -112,10 +147,10 @@ int main()
 				break;
 			}
 		}
-		for (int i = snakeLen - 1; i > 0; i--) {
-			x[i] = x[i - 1];
-			y[i] = y[i - 1];
-		}
+	
+		Ix = x[0];
+		Iy = y[0];
+
 		switch (gDirection)
 		{
 		case UP :
@@ -141,37 +176,60 @@ int main()
 				gStatus = END;
 			break;
 		}
-		for (int i = 1; i < snakeLen; i++) {
+		for (int i = snakeLen - 1; i > 1; i--) {
+			x[i] = x[i - 1];
+			y[i] = y[i - 1];
+		}
+		x[1] = Ix;
+		y[1] = Iy;
+		if (x[0] == gItem.x && y[0] == gItem.y) {//먹는판정
+			snakeLen++;
+			gItemoo = OFF;
+		} 
+
+		if (gItemoo == OFF) { //u재생성
+			gItemoo = ON;
+			while (1) 
+			{
+				srand(time(NULL));
+				int check = 0;
+				gItem.x = (rand() % 60) * 2;
+				gItem.y = rand() % 30;
+				for (int i = 0; i < snakeLen; i++) {
+					if (x[i] == gItem.x && y[i] == gItem.y) {
+						check = 1;
+						break;
+					}
+				}
+				if (check == 0)
+					break;
+			}
+		}
+
+		for (int i = 1; i < snakeLen; i++) { //자기몸과의 충돌판정
 			if (x[0] == x[i] && y[0] == y[i])
 				gStatus = END;
 		}
-		if (x[0] == gItem.x && y[0] == gItem.y) {
-			snakeLen++;
-			gItemoo = OFF;
-		}
-		if (gItemoo == OFF) {
-			gItemoo = ON;
-			srand(time(NULL));
-			gItem.x = (rand() % 60)*2;
-			gItem.y = rand() % 30;
-		}
-
 		system("cls");
-		for (int i = 0; i < snakeLen; i++) {
+		for (int i = 1; i < snakeLen; i++) {
 			gotoxy(x[i], y[i]);
 			printf("■");
 		}
+		gotoxy(x[0],y[0]);
+		printf("□");
 		gotoxy(gItem.x,gItem.y);
 		printf("ⓤ");
 		while (1)
 		{
 			curTime = clock();
-			if (curTime - oldTime > 100) {
+			if (curTime - oldTime > 120-(snakeLen/3)) {
 				oldTime = curTime;
 				break;
 			}
 		}
 	}
+	end(snakeLen);
+	
     return 0;
 }
 
